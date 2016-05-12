@@ -68,3 +68,27 @@ class PlaylistTableViewController: UITableViewController {
         }
     }
 }
+
+
+
+
+/*
+ • if segue.identifier == "toSongList" 
+    check that you have right segue identifier
+ • let songListTVC = segue.destinationViewController as? SongListTableViewController
+    state the destination of the segue, segue.destinationViewController is going to SongListTableViewController (as? = cast)
+ • let playlistCell = sender as? UITableViewCell
+    cast playlistcell as a uitableviewcell, parameters in func is set as anyobject, must declare that it is a cell
+ • let indexPath = tableView.indexPathForCell(playlistCell)
+    create constant of indexpath to retrieve the indexpath of the cell
+ • songListTVC.playlist = PlaylistController.sharedInstance.playlists[indexPath.row]
+    property of playlist, grab the specific playlist
+ */
+
+
+
+
+
+
+
+
