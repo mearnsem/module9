@@ -10,9 +10,6 @@ import UIKit
 
 class SongListTableViewController: UITableViewController {
     
-    @IBOutlet weak var titleTextField: UITextField!
-    @IBOutlet weak var artistTextField: UITextField!
-    
     var playlist: Playlist?
     
     override func viewDidLoad() {
@@ -25,13 +22,31 @@ class SongListTableViewController: UITableViewController {
     
     // MARK: - IBActions
     
+    //create alertController in addButtonTapped. addtextfieldwithconfigurationhandler. two actions, create & cancel. unwrap textfields in create to save the new playlist. addPlaylist.reload. add actions, presentview
+    
     @IBAction func addButtonTapped(sender: AnyObject) {
-        if let title = titleTextField.text, let artist = artistTextField.text, let playlist = playlist {
-            SongController.createSong(title, artist: artist, playlist: playlist)
-            tableView.reloadData()
-            titleTextField.text = ""
-            artistTextField.text = ""
+        let alertController = UIAlertController(title: "New Song", message: "Add a song to your playlist", preferredStyle: .Alert)
+        alertController.addTextFieldWithConfigurationHandler { (songTextField) in
+            songTextField.placeholder = "Song name"
         }
+        alertController.addTextFieldWithConfigurationHandler { (artistTextField) in
+            artistTextField.placeholder = "Artist name"
+        }
+        let addAction = UIAlertAction(title: "Add", style: .Default) { (_) in
+            guard let textFields = alertController.textFields, songTextField = textFields.first, songTitle = songTextField.text else {
+                return
+            }
+            let artistTextField = textFields[1]
+            guard let artistName = artistTextField.text, playlist = self.playlist else {
+                return
+            }
+            SongController.createSong(songTitle, artist: artistName, playlist: playlist)
+            self.tableView.reloadData()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(addAction)
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source

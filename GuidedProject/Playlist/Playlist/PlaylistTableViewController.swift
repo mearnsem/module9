@@ -9,24 +9,29 @@
 import UIKit
 
 class PlaylistTableViewController: UITableViewController {
-    
-    
-    @IBOutlet weak var playlistNameTextField: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
     }
     
     // MARK: - IBActions
     
     @IBAction func addButtonTapped(sender: AnyObject) {
-        if let playlistName = playlistNameTextField.text where playlistName.characters.count > 0 {
-            PlaylistController.sharedInstance.addPlaylist(playlistName)
-            tableView.reloadData()
-            playlistNameTextField.text = ""
+        let alertController = UIAlertController(title: "New Playlist", message: "Create a new playlist", preferredStyle: .Alert)
+        alertController.addTextFieldWithConfigurationHandler { (textField) in
+            textField.placeholder = "Playlist name"
         }
+        let createAction = UIAlertAction(title: "Create", style: .Default) { (_) in
+            guard let textFields = alertController.textFields, firstTextField = textFields.first, playlistName = firstTextField.text else {
+                return
+            }
+            PlaylistController.sharedInstance.addPlaylist(playlistName)
+            self.tableView.reloadData()
+        }
+        let cancelAction = UIAlertAction(title: "Cancel", style: .Cancel, handler: nil)
+        alertController.addAction(createAction)
+        alertController.addAction(cancelAction)
+        self.presentViewController(alertController, animated: true, completion: nil)
     }
     
     // MARK: - Table view data source
